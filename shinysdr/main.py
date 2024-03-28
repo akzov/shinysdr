@@ -24,7 +24,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import argparse
 import logging
-import os
 import sys
 
 from twisted.application.service import IService, MultiService
@@ -92,11 +91,6 @@ def _main_async(reactor, argv=None, _abort_for_test=False):
         write_default_config(args.config_path)
         _log.info('Created default configuration at: {config_path}', config_path=args.config_path)
         sys.exit(0)  # TODO: Consider using a return value or something instead
-    
-    # Refuse to run as root.
-    if hasattr(os, 'getuid') and os.getuid() == 0:
-        print('Network services should not be run as root. Refusing to start ShinySDR.', file=sys.stderr)
-        sys.exit(1)
     
     # Read config file.
     config_obj = Config(reactor=reactor, log=_log)
